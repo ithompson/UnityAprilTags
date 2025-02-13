@@ -44,3 +44,4 @@ jobs:
       with:
         name: lib-${{ matrix.target.name }}
         path: build/${{ matrix.target.artifact_name }}
+        if-no-files-found: error
