@@ -29,7 +29,7 @@ jobs:
           - name: macOS
             build_os: macos-latest
             cmake_args: -G Xcode -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-            artifact_name: libUnityAprilTags.dylib
+            artifact_name: Release/libUnityAprilTags.dylib
           - name: Linux
             build_os: ubuntu-latest
             artifact_name: libUnityAprilTags.so
