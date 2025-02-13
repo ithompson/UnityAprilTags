@@ -25,7 +25,7 @@ else()
 	set(LIBRARY_TARGET_TYPE SHARED)
 endif()
 
-if (IOS OR OSX)
+if (CMAKE_C_COMPILER_ID MATCHES "Clang")
 	target_compile_options(apriltag PRIVATE -Wno-shorten-64-to-32)
 endif()
 
