@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    name: asdf
+    runs-on: ${{ matrix.target.build_os }}
+    timeout-minutes: 3
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - name: Windows
+            build_os: windows-latest
+            cmake_generator: Ninja
+            artifact_name: UnityAprilTags.dll
+          - name: iOS
+            build_os: macos-latest
+            cmake_generator: Xcode
+            cmake_args: -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=16.0
+            artifact_name: libUnityAprilTags.a
+          - name: macOS
+            build_os: macos-latest
+            cmake_generator: Xcode
+            cmake_args: -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+            artifact_name: libUnityAprilTags.dylib
+          - name: Linux
+            build_os: ubuntu-latest
+            cmake_generator: Ninja
+            artifact_name: libUnityAprilTags.so
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build with CMake
+      run: |
+        cmake -B build -G "${{ matrix.target.cmake_generator }}" ${{ matrix.target.cmake_args }}
+        cmake --build build
+    - name: Install artifacts with CMake
+      run: |
+        cmake --install build --prefix install
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: lib-{{ matrix.target.name }}
+        path: install/{{ matrix.target.artifact_name }}
