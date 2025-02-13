@@ -25,7 +25,7 @@ else()
 	set(LIBRARY_TARGET_TYPE SHARED)
 endif()
 
-if (IOS OR OSX)
+if (IOS)
 	target_compile_options(apriltags PRIVATE -Wno-shorten-64-to-32)
 endif()
 
