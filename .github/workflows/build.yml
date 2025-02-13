@@ -21,7 +21,7 @@ jobs:
         target:
           - name: Windows
             build_os: windows-latest
-            artifact_name: UnityAprilTags.dll
+            artifact_name: Release\UnityAprilTags.dll
           - name: iOS
             build_os: macos-latest
             cmake_args: -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=16.0
