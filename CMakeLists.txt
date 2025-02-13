@@ -26,7 +26,7 @@ else()
 endif()
 
 if (IOS OR OSX)
-	target_compile_options(apriltags PRIVATE -Wno-shorten-64-to-32)
+	target_compile_options(apriltag PRIVATE -Wno-shorten-64-to-32)
 endif()
 
 # Add source to this project's executable.
