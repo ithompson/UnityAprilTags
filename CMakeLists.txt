@@ -25,6 +25,10 @@ else()
 	set(LIBRARY_TARGET_TYPE SHARED)
 endif()
 
+if (IOS OR OSX)
+	target_compile_options(apriltags PRIVATE -Wno-shorten-64-to-32)
+endif()
+
 # Add source to this project's executable.
 add_library (UnityAprilTags ${LIBRARY_TARGET_TYPE} "UnityAprilTags.c")
 target_link_libraries(UnityAprilTags PRIVATE apriltag)
