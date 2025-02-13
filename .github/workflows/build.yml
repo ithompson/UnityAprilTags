@@ -38,7 +38,7 @@ jobs:
     - name: Build with CMake
       run: |
         cmake -B build ${{ matrix.target.cmake_args }} -DCMAKE_BUILD_TYPE=Release
-        cmake --build build
+        cmake --build build --config Release
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
