@@ -18,8 +18,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(apriltag)
 set_target_properties(apriltag PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+if (IOS)
+	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED "NO")
+	set(LIBRARY_TARGET_TYPE STATIC)
+else()
+	set(LIBRARY_TARGET_TYPE SHARED)
+endif()
+
 # Add source to this project's executable.
-add_library (UnityAprilTags SHARED "UnityAprilTags.c")
+add_library (UnityAprilTags ${LIBRARY_TARGET_TYPE} "UnityAprilTags.c")
 target_link_libraries(UnityAprilTags PRIVATE apriltag)
 set_target_properties(UnityAprilTags PROPERTIES PUBLIC_HEADER "UnityAprilTags.h")
 
