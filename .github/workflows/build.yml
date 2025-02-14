@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  run:
+    name: Build for ${{ matrix.target.name }}
+    runs-on: ${{ matrix.target.build_os }}
+    timeout-minutes: 3
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - name: Windows
+            build_os: windows-latest
+            cmake_preset: windows-x64-release
+            artifact_name: Release/UnityAprilTags.dll
+          - name: iOS
+            build_os: macos-latest
+            cmake_preset: iphoneos-release
+            artifact_name: Release-iphoneos/libUnityAprilTags.a
+          - name: macOS
+            build_os: macos-latest
+            cmake_preset: macos-release
+            artifact_name: Release/libUnityAprilTags.dylib
+          - name: Linux
+            build_os: ubuntu-latest
+            cmake_preset: linux-release
+            artifact_name: libUnityAprilTags.so
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build with CMake
+      run: |
+        cmake --preset ${{ matrix.target.cmake_preset }}
+        cmake --build --preset ${{ matrix.target.cmake_preset }}
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: lib-${{ matrix.target.name }}
+        path: out/build/${{ matrix.target.cmake_preset }}/${{ matrix.target.artifact_name }}
+        if-no-files-found: error
