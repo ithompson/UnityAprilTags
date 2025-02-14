@@ -22,15 +22,15 @@ jobs:
           - name: Windows
             build_os: windows-latest
             cmake_preset: windows-x64-release
-            artifact_name: UnityAprilTags.dll
+            artifact_name: Release/UnityAprilTags.dll
           - name: iOS
             build_os: macos-latest
             cmake_preset: iphoneos-release
-            artifact_name: libUnityAprilTags.a
+            artifact_name: Release-iphoneos/libUnityAprilTags.a
           - name: macOS
             build_os: macos-latest
             cmake_preset: macos-release
-            artifact_name: libUnityAprilTags.dylib
+            artifact_name: Release/libUnityAprilTags.dylib
           - name: Linux
             build_os: ubuntu-latest
             cmake_preset: linux-release
