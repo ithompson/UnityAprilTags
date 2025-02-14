@@ -21,27 +21,29 @@ jobs:
         target:
           - name: Windows
             build_os: windows-latest
-            artifact_name: Release\UnityAprilTags.dll
+            cmake_preset: windows-x64-release
+            artifact_name: UnityAprilTags.dll
           - name: iOS
             build_os: macos-latest
-            cmake_args: -G Xcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_DEPLOYMENT_TARGET=16.0 -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO
-            artifact_name: Release-iphoneos/libUnityAprilTags.a
+            cmake_preset: iphoneos-release
+            artifact_name: libUnityAprilTags.a
           - name: macOS
             build_os: macos-latest
-            cmake_args: -G Xcode -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-            artifact_name: Release/libUnityAprilTags.dylib
+            cmake_preset: macos-release
+            artifact_name: libUnityAprilTags.dylib
           - name: Linux
             build_os: ubuntu-latest
+            cmake_preset: linux-release
             artifact_name: libUnityAprilTags.so
     steps:
     - uses: actions/checkout@v4
     - name: Build with CMake
       run: |
-        cmake -B build ${{ matrix.target.cmake_args }} -DCMAKE_BUILD_TYPE=Release
-        cmake --build build --config Release
+        cmake --preset ${{ matrix.target.cmake_preset }}
+        cmake --build --preset ${{ matrix.target.cmake_preset }}
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: lib-${{ matrix.target.name }}
-        path: build/${{ matrix.target.artifact_name }}
+        path: out/build/${{ matrix.target.cmake_preset }}/${{ matrix.target.artifact_name }}
         if-no-files-found: error
