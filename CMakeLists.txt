@@ -31,8 +31,12 @@ endif()
 
 # Add source to this project's executable.
 add_library (UnityAprilTags ${LIBRARY_TARGET_TYPE} "UnityAprilTags.c")
-target_link_libraries(UnityAprilTags PRIVATE apriltag)
 set_target_properties(UnityAprilTags PROPERTIES PUBLIC_HEADER "UnityAprilTags.h")
+
+# Embed the apriltag library directly into this one
+# This is done instead of linking so that static versions of the UnityAprilTags library are standalone
+target_sources(UnityAprilTags PRIVATE $<TARGET_OBJECTS:apriltag>)
+target_include_directories(UnityAprilTags PRIVATE $<TARGET_PROPERTY:apriltag,INTERFACE_INCLUDE_DIRECTORIES>)
 
 # TODO: Add tests and install targets if needed.
 install(TARGETS UnityAprilTags
